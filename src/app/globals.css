@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .icon {
+    @apply flex flex-col items-center justify-center text-sm font-light;
+  }
+
+  .icon svg {
+    @apply fill-white stroke-gray-300 text-gray-300;
+  }
+
+  .icon p {
+    @apply text-xs text-gray-700;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
