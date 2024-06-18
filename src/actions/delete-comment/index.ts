@@ -24,14 +24,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     const comment = post.comments?.find((comment) => (comment.id = commentId));
     if (!comment) return { error: "comment not found" };
 
-    console.log(comment.user.userId !== user.id);
-    console.log(post.user.userId !== user.id);
 
-    if (comment.user.userId === user.id || post.user.userId === user.id) {
-      return { error: "you can not delete this commnet" };
-    } else {
+   // if (comment.user.userId === user.id || post.user.userId === user.id) {
+   //   return { error: "you can not delete this commnet" };
+ //   } else {
       await post.removeComment(commentId);
-    }
+ //   }
   } catch (error) {
     console.log(error);
     return { error: "fail to delete comment" };
