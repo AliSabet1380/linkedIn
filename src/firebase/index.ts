@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyArJqQw5MLLCEAqGGXOwMZ2EIp7R1WRjWA",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "linkedin-clone-97d57.firebaseapp.com",
   projectId: "linkedin-clone-97d57",
   storageBucket: "linkedin-clone-97d57.appspot.com",
