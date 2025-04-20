@@ -10,7 +10,6 @@ import { connectDB } from "@/DB/db";
 import { CreatePostZodSchema } from "./schema";
 import { InputType, ReturnType } from "./type";
 import { createSafeAction } from "../safeAction";
-import { ObjectId } from "mongoose";
 import { revalidatePath } from "next/cache";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -34,17 +33,29 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     await connectDB();
 
     if (file?.size > 0) {
-      const storageRef = ref(storage, `${file.name}-${Date.now()}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const storageRef = ref(storage, `posts/${file.name}-${Date.now()}`);
 
-      const imageUrl = await getDownloadURL((await uploadTask).ref);
+      // Create metadata for the upload
+      const metadata = {
+        contentType: file.type,
+      };
+
+      // Upload the file
+      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+      // Wait for the upload to complete
+      const snapshot = await uploadTask;
+
+      // Get the download URL
+      const imageUrl = await getDownloadURL(snapshot.ref);
 
       post = await Post.create({ imageUrl, text, user: userDB });
     } else {
       post = await Post.create({ text, user: userDB });
     }
   } catch (error) {
-    return { error: "fail to create post" };
+    console.error("Firebase Storage Error:", error);
+    return { error: `Failed to upload file` };
   }
 
   revalidatePath("/");
